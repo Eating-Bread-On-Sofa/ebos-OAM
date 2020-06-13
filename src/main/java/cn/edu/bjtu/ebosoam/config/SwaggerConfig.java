@@ -18,14 +18,14 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("cn.edu.bjtu.ebosscenario.controller"))
+                .apis(RequestHandlerSelectors.basePackage("cn.edu.bjtu.ebosoam.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("SCENARIO API文档")
+                .title("OAM API文档")
                 .build();
     }
 }
