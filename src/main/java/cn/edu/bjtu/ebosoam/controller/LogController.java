@@ -1,5 +1,6 @@
 package cn.edu.bjtu.ebosoam.controller;
 
+import cn.edu.bjtu.ebosoam.entity.Log;
 import cn.edu.bjtu.ebosoam.service.LogService;
 import com.alibaba.fastjson.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RequestMapping("/api")
 @RestController
@@ -30,7 +33,7 @@ public class LogController {
 
     @CrossOrigin
     @GetMapping("/logtest")
-    public JSONArray loggerTest(){
+    public List<Log> loggerTest(){
         return logService.findAll();
     }
 }
