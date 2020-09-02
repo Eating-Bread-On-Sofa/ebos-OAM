@@ -24,7 +24,6 @@ public class InitListener implements ApplicationRunner {
             while (true) {
                 JSONObject msg = JSON.parseObject(mqConsumer.subscribe());
                 System.out.println("收到：" + msg);
-
             }
         }).start();
     }
