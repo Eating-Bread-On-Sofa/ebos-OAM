@@ -103,4 +103,12 @@ public class OamController {
         mqProducer.publish(topic,message);
         return "发布成功";
     }
+
+    @ApiOperation(value = "微服务运行检测", notes = "微服务正常运行时返回 pong")
+    @CrossOrigin
+    @GetMapping("/ping")
+    public String ping(){
+        return "pong";
+    }
+
 }
