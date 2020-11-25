@@ -1,6 +1,7 @@
 package cn.edu.bjtu.ebosoam.controller;
 
 import cn.edu.bjtu.ebosoam.entity.Log;
+import cn.edu.bjtu.ebosoam.entity.Recognized;
 import cn.edu.bjtu.ebosoam.service.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,20 +28,11 @@ public class OamController {
     SubscribeService subscribeService;
     @Autowired
     MqFactory mqFactory;
+    @Autowired
+    RecognizedService recognizedService;
 
     public static final List<RawSubscribe> status = new LinkedList<>();
     private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 50,3, TimeUnit.SECONDS,new SynchronousQueue<>());
-
-    @ApiOperation(value = "按条件筛选日志")
-    @CrossOrigin
-    @RequestMapping(value = "/log", method = RequestMethod.GET)
-    public List<Log> getLog(Date firstDate, Date lastDate, String source, String category, String operation) throws ParseException {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat ds = new SimpleDateFormat("yyyy-MM-dd ");
-        Date startDate = df.parse(ds.format(firstDate) + "00:00:00");
-        Date endDate = df.parse(ds.format(lastDate) + "23:59:59");
-        return logService.find(startDate, endDate, source, category, operation);
-    }
 
     @ApiOperation(value = "微服务订阅mq的主题")
     @CrossOrigin
@@ -104,11 +96,24 @@ public class OamController {
         return "发布成功";
     }
 
+    @ApiOperation(value = "显示最近100条人脸识别信息", notes = "前端每次刚打开人脸识别界面调用")
+    @CrossOrigin
+    @GetMapping("/recent")
+    public List<Recognized> getRecent(){
+        return recognizedService.findRecent();
+    }
+
+    @ApiOperation(value = "通过人名搜索识别结果", notes = "前端人脸识别界面搜索时调用")
+    @CrossOrigin
+    @GetMapping("/log")
+    public List<Recognized> getRecognized(String name){
+        return recognizedService.find(name);
+    }
+
     @ApiOperation(value = "微服务运行检测", notes = "微服务正常运行时返回 pong")
     @CrossOrigin
     @GetMapping("/ping")
     public String ping(){
         return "pong";
     }
-
 }
