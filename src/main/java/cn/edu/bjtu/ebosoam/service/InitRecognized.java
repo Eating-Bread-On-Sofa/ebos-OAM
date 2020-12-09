@@ -23,7 +23,7 @@ public class InitRecognized implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         new Thread(()->{
             MqConsumer mqConsumer = mqFactory.createConsumer("photo");
-            int temp = 1;
+            int temp = 2;
             while (true){
                 String base64 = mqConsumer.subscribe();
                 if (base64 == null){
@@ -49,7 +49,7 @@ public class InitRecognized implements ApplicationRunner {
                     OamController.faceRecognized.put("url",url);
                     OamController.faceRecognized.put("message","陌生人进入摄像头识别视野！");
                     if(temp>1000){
-                        temp=1;
+                        temp=2;
                     }else {
                         temp++;
                     }
