@@ -5,7 +5,7 @@ spring:
       port: 27017
       database: edge
   resources:
-    static-locations: classpath:/static
+    static-locations: file:/opt/photo/
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -20,6 +20,8 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
       bootstrap-servers: 127.0.0.1:9092
+  mvc:
+    static-path-pattern: /image/**
 server:
   edgex: localhost
   port: 8086

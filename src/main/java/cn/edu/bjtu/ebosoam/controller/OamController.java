@@ -1,16 +1,14 @@
 package cn.edu.bjtu.ebosoam.controller;
 
-import cn.edu.bjtu.ebosoam.entity.Log;
 import cn.edu.bjtu.ebosoam.entity.Recognized;
 import cn.edu.bjtu.ebosoam.service.*;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.SynchronousQueue;
@@ -33,6 +31,7 @@ public class OamController {
 
     public static final List<RawSubscribe> status = new LinkedList<>();
     private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 50,3, TimeUnit.SECONDS,new SynchronousQueue<>());
+    public static JSONObject faceRecognized = new JSONObject();
 
     @ApiOperation(value = "微服务订阅mq的主题")
     @CrossOrigin
@@ -100,14 +99,31 @@ public class OamController {
     @CrossOrigin
     @GetMapping("/recent")
     public List<Recognized> getRecent(){
-        return recognizedService.findRecent();
+        List<Recognized> result = recognizedService.findRecent();
+        Collections.reverse(result);
+        return result;
     }
 
     @ApiOperation(value = "通过人名搜索识别结果", notes = "前端人脸识别界面搜索时调用")
     @CrossOrigin
     @GetMapping("/log")
     public List<Recognized> getRecognized(String name){
-        return recognizedService.find(name);
+        List<Recognized> result = recognizedService.find(name);
+        Collections.reverse(result);
+        return result;
+    }
+
+    @ApiOperation(value = "通过人名搜索识别结果", notes = "前端人脸识别界面搜索时调用")
+    @CrossOrigin
+    @GetMapping("/face")
+    public JSONObject getRecognizedWarn(){
+        JSONObject result = new JSONObject();
+        if(faceRecognized.equals(new JSONObject())){
+            return faceRecognized;
+        }
+        result = faceRecognized;
+        faceRecognized = new JSONObject();
+        return result;
     }
 
     @ApiOperation(value = "微服务运行检测", notes = "微服务正常运行时返回 pong")
