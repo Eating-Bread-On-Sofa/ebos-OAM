@@ -5,7 +5,7 @@ spring:
       port: 27017
       database: edge
   resources:
-    static-locations: file:E:/opt/photo/
+    static-locations: file:/opt/photo/
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
