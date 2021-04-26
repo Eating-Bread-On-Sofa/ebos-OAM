@@ -113,7 +113,7 @@ public class OamController {
         return result;
     }
 
-    @ApiOperation(value = "通过人名搜索识别结果", notes = "前端人脸识别界面搜索时调用")
+    @ApiOperation(value = "陌生人出现告警", notes = "陌生人出现告警")
     @CrossOrigin
     @GetMapping("/face")
     public JSONObject getRecognizedWarn(){

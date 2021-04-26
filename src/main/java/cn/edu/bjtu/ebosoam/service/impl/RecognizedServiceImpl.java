@@ -3,6 +3,7 @@ package cn.edu.bjtu.ebosoam.service.impl;
 import cn.edu.bjtu.ebosoam.entity.Recognized;
 import cn.edu.bjtu.ebosoam.service.RecognizedService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -24,7 +25,7 @@ public class RecognizedServiceImpl implements RecognizedService {
     @Override
     public List<Recognized> findRecent() {
         Query query = new Query();
-        query.limit(100);
+        query.with(Sort.by(Sort.Order.desc("time"))).limit(100);
         return mongoTemplate.find(query,Recognized.class,"recognized_name");
     }
 
