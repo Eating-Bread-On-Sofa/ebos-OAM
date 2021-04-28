@@ -8,6 +8,7 @@ class EbosOamApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println("hello");
     }
 
 }

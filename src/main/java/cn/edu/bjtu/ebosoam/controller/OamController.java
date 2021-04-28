@@ -100,7 +100,7 @@ public class OamController {
     @GetMapping("/recent")
     public List<Recognized> getRecent(){
         List<Recognized> result = recognizedService.findRecent();
-        Collections.reverse(result);
+//        Collections.reverse(result);
         return result;
     }
 
