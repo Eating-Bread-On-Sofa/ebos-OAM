@@ -50,7 +50,6 @@ public class ManholeController {
         js = result.getJSONObject("eventContent");
         String content = "";
         Date time = stampToDate(result.getString("timestamp"));
-        System.out.println(result.getString("serviceId"));
         switch (result.getIntValue("serviceId")){
             case 1001:
                 if (js.getIntValue("manhole_cover_position_state") == 1){
