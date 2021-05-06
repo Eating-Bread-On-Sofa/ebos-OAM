@@ -108,9 +108,8 @@ public class OamController {
     @CrossOrigin
     @GetMapping("/log")
     public List<Recognized> getRecognized(String name){
-        List<Recognized> result = recognizedService.find(name);
-        Collections.reverse(result);
-        return result;
+        //        Collections.reverse(result);
+        return recognizedService.find(name);
     }
 
     @ApiOperation(value = "陌生人出现告警", notes = "陌生人出现告警")
