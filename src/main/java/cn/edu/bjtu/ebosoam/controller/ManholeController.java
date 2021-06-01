@@ -1,7 +1,10 @@
 package cn.edu.bjtu.ebosoam.controller;
 
 import cn.edu.bjtu.ebosoam.entity.ManholeEvent;
+import cn.edu.bjtu.ebosoam.entity.ManholeReport;
 import cn.edu.bjtu.ebosoam.service.ManholeEventService;
+import cn.edu.bjtu.ebosoam.service.ManholeReportService;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ public class ManholeController {
     RestTemplate restTemplate;
     @Autowired
     ManholeEventService manholeEventService;
+    @Autowired
+    ManholeReportService manholeReportService;
 
     public static JSONObject eventWarning = new JSONObject();
 
@@ -42,6 +47,29 @@ public class ManholeController {
         }catch (Exception ignored){}
         if (result.getString("messageType").equals("eventReport")){
             eventReport(result,deviceName);
+        }
+        if (result.getString("messageType").equals("dataReport")){
+            dataReport(result,id,deviceName);
+        }
+    }
+
+    public void dataReport(JSONObject result,String id,String deviceName){
+        if (result.getIntValue("serviceId")==3){
+            JSONObject payload = result.getJSONObject("payload");
+            ManholeReport manhole = new ManholeReport();
+            manhole.setDeviceID(id);
+            manhole.setDeviceName(deviceName);
+            manhole.setBattery_value(payload.getIntValue("battery_value") + "%");
+            manhole.setRssi(payload.getIntValue("rssi"));
+            manhole.setLongitude(payload.getFloatValue("longitude"));
+            manhole.setLatitude(payload.getFloatValue("latitude"));
+            ManholeReport manholeReport = manholeReportService.findByName(deviceName);
+            if (manholeReport == null){
+                manholeReportService.write(manhole);
+            }else {
+                manholeReportService.remove(id);
+                manholeReportService.write(manhole);
+            }
         }
     }
 
@@ -129,5 +157,36 @@ public class ManholeController {
         result = eventWarning;
         eventWarning = new JSONObject();
         return result;
+    }
+
+    @ApiOperation(value = "展示井盖设备数据列表、经纬度数据")
+    @CrossOrigin
+    @GetMapping("/showReport")
+    public List<ManholeReport> showReport(){
+        List<ManholeReport> manholeReports = manholeReportService.find();
+        JSONArray ja = new JSONArray();
+        int i=0;
+        String url = "http://localhost:8081/api/device/ip/localhost";
+        try {
+            ja = restTemplate.getForObject(url,JSONArray.class);
+        }catch (Exception ignored){}
+        for (ManholeReport manholeReport : manholeReports){
+            for (i=0; i<ja.size(); i++){
+                if (manholeReport.getDeviceID().equals(ja.getJSONObject(i).getString("id"))){
+                    break;
+                }
+            }
+            if (i==ja.size()){
+                manholeReportService.remove(manholeReport.getDeviceID());
+            }
+        }
+        return manholeReportService.find();
+    }
+
+    @ApiOperation(value = "通过设备名称搜索设备列表信息")
+    @CrossOrigin
+    @GetMapping("/findReport")
+    public ManholeReport findReport(String deviceName){
+        return manholeReportService.findByName(deviceName);
     }
 }

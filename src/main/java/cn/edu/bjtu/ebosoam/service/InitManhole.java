@@ -7,13 +7,11 @@
 //import org.apache.activemq.command.ActiveMQMapMessage;
 //import org.apache.activemq.command.ActiveMQTextMessage;
 //import org.apache.activemq.util.ByteSequence;
-//import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.beans.factory.annotation.Value;
 //import org.springframework.boot.ApplicationArguments;
 //import org.springframework.boot.ApplicationRunner;
 //import org.springframework.core.annotation.Order;
 //import org.springframework.stereotype.Component;
-//import org.springframework.web.client.RestTemplate;
 //
 //import javax.jms.*;
 //
@@ -28,9 +26,6 @@
 //
 //    @Value("${url}")
 //    public String url;
-//
-//    @Autowired
-//    RestTemplate restTemplate;
 //
 //    public MessageConsumer getConsumer(String topic){
 //        MessageConsumer messageConsumer = null;
