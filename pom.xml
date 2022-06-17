@@ -55,7 +55,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.39</version>
+            <version>1.2.83</version>
         </dependency>
         <!-- Swagger2核心包-->
         <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
